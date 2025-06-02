@@ -13,8 +13,9 @@ HTML_TEMPLATE = '''
 <title>Generador de Patentes</title>
 <h2>Ingresa tu patente:</h2>
 <form method="post">
-  <input name="patente" type="text" maxlength="10" required>
-  <input type="submit" value="Generar PDF">
+  <input name="patente" type="text" maxlength="10" required placeholder="Patente">
+  <input name="email" type="email" required placeholder="Tu correo">
+  <input type="submit" value="Enviar PDF por correo">
 </form>
 '''
 
