@@ -1,15 +1,19 @@
-
 from flask import Flask, request, render_template_string
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 import smtplib
 from email.message import EmailMessage
 import os
 
 app = Flask(__name__)
 
+# Ruta de la fuente TTF
 FONT_PATH = "5x5dotso.ttf"
+pdfmetrics.registerFont(TTFont("Dots", FONT_PATH))
 
+# HTML simple para la interfaz
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
@@ -25,6 +29,7 @@ HTML_TEMPLATE = """
 </html>
 """
 
+# Crear PDF de patente con la fuente personalizada
 def crear_pdf(patente):
     pdf_path = f"{patente}.pdf"
     c = canvas.Canvas(pdf_path, pagesize=A4)
@@ -32,11 +37,12 @@ def crear_pdf(patente):
     y = 750
     for _ in range(10):
         c.drawString(100, y, patente)
-        c.drawString(350, y, patente)
+        c.drawString(480, y, patente)
         y -= 60
     c.save()
     return pdf_path
 
+# Enviar email con archivo PDF adjunto
 def enviar_email(destinatario, archivo_pdf, nombre_patente):
     msg = EmailMessage()
     msg['Subject'] = f"Patente {nombre_patente} en PDF"
@@ -47,11 +53,15 @@ def enviar_email(destinatario, archivo_pdf, nombre_patente):
     with open(archivo_pdf, 'rb') as f:
         msg.add_attachment(f.read(), maintype='application', subtype='pdf', filename=f"{nombre_patente}.pdf")
 
-    with smtplib.SMTP('smtp-relay.brevo.com', 587) as smtp:
-        smtp.starttls()
-        smtp.login('8ea29e002@smtp-brevo.com', '75UrzyN6RXObI4BM')
-        smtp.send_message(msg)
+    try:
+        with smtplib.SMTP('smtp-relay.brevo.com', 587) as smtp:
+            smtp.starttls()
+            smtp.login('8ea29e002@smtp-brevo.com', '75UrzyN6RXObI4BM')
+            smtp.send_message(msg)
+    except Exception as e:
+        print(f"Error al enviar correo: {e}")
 
+# Rutas web
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -59,12 +69,8 @@ def index():
         email = request.form['email'].strip()
         path = crear_pdf(patente)
         enviar_email(email, path, patente)
-        return f"<h3> PDF enviado a {email}</h3>"
+        return f"<h3>PDF de la patente <b>{patente}</b> enviado a <b>{email}</b></h3>"
     return render_template_string(HTML_TEMPLATE)
 
 if __name__ == '__main__':
-    from reportlab.pdfbase import pdfmetrics
-    from reportlab.pdfbase.ttfonts import TTFont
-    pdfmetrics.registerFont(TTFont("Dots", FONT_PATH))
     app.run(debug=True)
-
