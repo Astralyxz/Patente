@@ -42,11 +42,7 @@ def enviar_email(destinatario, archivo_pdf, nombre_patente):
     msg['Subject'] = f"Patente {nombre_patente} en PDF"
     msg['From'] = '8ea29e002@smtp-brevo.com'
     msg['To'] = destinatario
-    msg.set_content(f"Hola,
-
-Aquí tienes el archivo PDF de la patente {nombre_patente}.
-
-Gracias por usar la app jiji.")
+    msg.set_content(f"Hola,\n\nAquí tienes el archivo PDF de la patente {nombre_patente}.\n\nGracias por usar la app.")
 
     with open(archivo_pdf, 'rb') as f:
         msg.add_attachment(f.read(), maintype='application', subtype='pdf', filename=f"{nombre_patente}.pdf")
