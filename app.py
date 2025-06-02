@@ -21,7 +21,7 @@ HTML_TEMPLATE = """
   <body>
     <h2>Generar y Enviar Patente</h2>
     <form method="POST">
-      <input name="patente" type="text" required placeholder="Ej: HLPT47">
+      <input name="patente" type="text" required>
       <input name="email" type="email" required placeholder="Correo destino">
       <input type="submit" value="Enviar PDF por correo">
     </form>
@@ -69,7 +69,7 @@ def index():
         email = request.form['email'].strip()
         path = crear_pdf(patente)
         enviar_email(email, path, patente)
-        return f"<h3>PDF de la patente <b>{patente}</b> enviado a <b>{email}</b></h3>"
+        return f"<p>PDF de la patente <b>{patente}</b> enviado a <b>{email}<p>"
     return render_template_string(HTML_TEMPLATE)
 
 if __name__ == '__main__':
