@@ -139,8 +139,7 @@ def index():
               </div>
             </body>
             </html>
-            """
-            )
+            """)
         else:
             return render_template_string("""
             <!DOCTYPE html>
@@ -166,8 +165,7 @@ def index():
               </div>
             </body>
             </html>
-            ""
-            )
+            """)
     return render_template_string(HTML_TEMPLATE)
 
 if __name__ == '__main__':
