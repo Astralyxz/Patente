@@ -48,7 +48,7 @@ def crear_pdf(patente):
 def enviar_email(destinatario, archivo_pdf, nombre_patente):
     msg = EmailMessage()
     msg['Subject'] = f"Patente {nombre_patente} en PDF"
-    msg['From'] = 'parramartin690@gmail.com'
+    msg['From'] = 'parramartinalejandro690@gmail.com'
     msg['To'] = destinatario
     msg.set_content(f"Hola,\n\nAquí tienes el archivo PDF de la patente {nombre_patente}.\n\nGracias por usar la app.")
 
@@ -57,7 +57,7 @@ def enviar_email(destinatario, archivo_pdf, nombre_patente):
             msg.add_attachment(f.read(), maintype='application', subtype='pdf', filename=f"{nombre_patente}.pdf")
 
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login('parramartin690@gmail.com', 'danmqxiyigoytkgi')  # Tu contraseña de app
+            smtp.login('parramartinalejandro690@gmail.com', 'danmqxiyigoytkgi')  # Tu contraseña de app
             smtp.send_message(msg)
 
         return True
