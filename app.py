@@ -1,6 +1,6 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template_string, send_file
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import letter
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import smtplib
@@ -13,7 +13,7 @@ app = Flask(__name__)
 FONT_PATH = "5x5dotso.ttf"
 if not os.path.exists(FONT_PATH):
     raise FileNotFoundError("No se encontró el archivo de fuente 5x5dotso.ttf")
-pdfmetrics.registerFont(TTFont("Dots", FONT_PATH))
+pdfmetrics.registerFont(TTFont("5x5DotsOutline", FONT_PATH))
 
 # HTML
 HTML_TEMPLATE = """
@@ -32,17 +32,28 @@ HTML_TEMPLATE = """
 """
 
 # Crear PDF
+
 def crear_pdf(patente):
-    pdf_path = f"{patente}.pdf"
-    c = canvas.Canvas(pdf_path, pagesize=A4)
-    c.setFont("Dots", 36)
-    y = 750
-    for _ in range(10):
-        c.drawString(100, y, patente)
-        c.drawString(480, y, patente)
-        y -= 60
+    font_size = 36
+    page_width, _ = letter
+    x_left = 100
+    start_y = 700
+    line_spacing = 60
+    text_width = pdfmetrics.stringWidth(patente, "5x5DotsOutline", font_size)
+    x_right = page_width - text_width - 80
+
+    filename = f"{patente}.pdf"
+    path = os.path.join("/tmp", filename)
+    c = canvas.Canvas(path, pagesize=letter)
+    c.setFont("5x5DotsOutline", font_size)
+
+    for i in range(10):
+        y = start_y - (i * line_spacing)
+        c.drawString(x_left, y, patente)
+        c.drawString(x_right, y, patente)
+
     c.save()
-    return pdf_path
+    return path
 
 # Enviar PDF por correo
 def enviar_email(destinatario, archivo_pdf, nombre_patente):
@@ -50,7 +61,7 @@ def enviar_email(destinatario, archivo_pdf, nombre_patente):
     msg['Subject'] = f"Patente {nombre_patente} en PDF"
     msg['From'] = 'parramartinalejandro690@gmail.com'
     msg['To'] = destinatario
-    msg.set_content(f"Hola,\n\nAquí tienes el archivo PDF de la patente {nombre_patente}.\n\nGracias por usar la app.")
+    msg.set_content(f"Archivo PDF de la patente a imprimir {nombre_patente}.\n\nGracias.")
 
     try:
         with open(archivo_pdf, 'rb') as f:
@@ -75,9 +86,9 @@ def index():
         path = crear_pdf(patente)
         enviado = enviar_email(email, path, patente)
         if enviado:
-            return f"<p>✅ PDF de la patente <b>{patente}</b> enviado a <b>{email}</b></p>"
+            return f"<p>PDF de la patente <b>{patente}</b> enviado a <b>{email}</b></p>"
         else:
-            return "<p>❌ Hubo un error al enviar el correo. Intenta más tarde o revisa los datos.</p>"
+            return "<p>Hubo un error al enviar el correo.</p>"
     return render_template_string(HTML_TEMPLATE)
 
 if __name__ == '__main__':
