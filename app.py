@@ -22,13 +22,14 @@ HTML_TEMPLATE = """
   <head>
     <meta charset=\"UTF-8\">
     <title>Generador de Patentes</title>
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
     <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\">
     <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css\">
   </head>
   <body class=\"bg-light\">
     <div class=\"container py-5\">
       <div class=\"row justify-content-center\">
-        <div class=\"col-md-4\">
+        <div class=\"col-md-5\">
           <div class=\"card shadow rounded-4\">
             <div class=\"card-body\">
               <h3 class=\"card-title text-center mb-4\"><i class=\"bi bi-file-earmark-pdf\"></i> Generador de Patentes</h3>
@@ -42,7 +43,7 @@ HTML_TEMPLATE = """
                   <input name=\"email\" type=\"email\" class=\"form-control\" placeholder=\"ejemplo@correo.com\" required>
                 </div>
                 <div class=\"d-grid\">
-                  <button type=\"submit\" class=\"btn btn-primary\"><i class=\"bi bi-envelope-fill\"></i> Enviar PDF por correo</button>
+                  <button type=\"submit\" class=\"btn btn-primary\"><i class=\"bi bi-download\"></i> Enviar PDF por correo</button>
                 </div>
               </form>
             </div>
@@ -96,6 +97,7 @@ def enviar_email(destinatario, archivo_pdf, nombre_patente):
             smtp.login('parramartinalejandro690@gmail.com', 'danmqxiyigoytkgi')
             smtp.send_message(msg)
 
+        os.remove(archivo_pdf)
         return True
 
     except Exception as e:
@@ -116,8 +118,10 @@ def index():
               <div class='alert alert-success rounded-4 shadow-sm'>
                 PDF de la patente <b>{patente}</b> enviado exitosamente a <b>{email}</b>
               </div>
-              <a href='/' class='btn btn-outline-primary mt-3'>Volver a enviar otra patente</a>
-              <a href='/descargar/{patente}' class='btn btn-outline-secondary mt-3 ms-2'>Descargar PDF</a>
+              <div class='d-flex justify-content-center gap-2'>
+                <a href='/' class='btn btn-outline-primary'>Volver a enviar otra patente</a>
+                <a href='/descargar/{patente}' class='btn btn-outline-secondary'>Descargar PDF</a>
+              </div>
             </div>
             """)
         else:
@@ -132,8 +136,8 @@ def index():
     return render_template_string(HTML_TEMPLATE)
 
 @app.route('/descargar/<patente>')
-def descargar_pdf(patente):
-    path = crear_pdf(patente.upper())
+def descargar(patente):
+    path = crear_pdf(patente)
     return send_file(path, as_attachment=True)
 
 if __name__ == '__main__':
