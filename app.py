@@ -30,7 +30,7 @@ HTML_TEMPLATE = """
         <div class="col-md-6">
           <div class="card shadow rounded-4">
             <div class="card-body">
-              <h3 class="card-title text-center mb-4">📄 Generador de Patentes</h3>
+              <h3 class="card-title text-center mb-4"><i class="bi bi-file-earmark-pdf"></i> Generador de Patentes</h3>
               <form method="POST">
                 <div class="mb-3">
                   <label for="patente" class="form-label">Patente</label>
@@ -41,13 +41,13 @@ HTML_TEMPLATE = """
                   <input name="email" type="email" class="form-control" placeholder="ejemplo@correo.com" required>
                 </div>
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-primary">📤 Enviar PDF por correo</button>
+                  <button type="submit" class="btn btn-primary"><i class="bi bi-download"></i>Enviar PDF por correo</button>
                 </div>
               </form>
             </div>
           </div>
           <div class="text-center mt-3 text-muted">
-            <small>Desarrollado por Martín - Proyecto de patente</small>
+            <small>Desarrollado por Astralyxz - Proyecto de patente PDF</small>
           </div>
         </div>
       </div>
