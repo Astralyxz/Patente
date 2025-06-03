@@ -46,7 +46,7 @@ def crear_pdf(patente):
 def enviar_email(destinatario, archivo_pdf, nombre_patente):
     msg = EmailMessage()
     msg['Subject'] = f"Patente {nombre_patente} en PDF"
-    msg['From'] = 'tucorreo@gmail.com'  # Reemplaza con tu correo
+    msg['From'] = 'parramartin690@gmail.com'
     msg['To'] = destinatario
     msg.set_content(f"Hola,\n\nAquí tienes el archivo PDF de la patente {nombre_patente}.\n\nGracias por usar la app.")
 
