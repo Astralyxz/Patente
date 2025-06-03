@@ -141,12 +141,30 @@ def index():
             )
         else:
             return render_template_string("""
-            <div class='container py-5 text-center'>
-              <div class='alert alert-danger rounded-4 shadow-sm'>
-                Hubo un error al enviar el correo.
+            <!DOCTYPE html>
+            <html lang=\"es\">
+            <head>
+              <meta charset=\"UTF-8\">
+              <title>Error</title>
+              <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\">
+              <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css\">
+            </head>
+            <body class=\"bg-light\">
+              <div class='container py-5'>
+                <div class='row justify-content-center'>
+                  <div class='col-md-5'>
+                    <div class='card shadow rounded-4'>
+                      <div class='card-body text-center'>
+                        <h4 class='card-title mb-4'><i class='bi bi-exclamation-triangle-fill text-danger'></i> Error</h4>
+                        <p class='mb-4'>Hubo un error al enviar el correo.</p>
+                        <a href='/' class='btn btn-outline-danger'>Volver a intentar</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <a href='/' class='btn btn-outline-danger mt-3'>Volver a intentar</a>
-            </div>
+            </body>
+            </html>
             ""
             )
     return render_template_string(HTML_TEMPLATE)
