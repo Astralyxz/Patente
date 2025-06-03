@@ -23,6 +23,7 @@ HTML_TEMPLATE = """
     <meta charset="UTF-8">
     <title>Generador de Patentes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   </head>
   <body class="bg-light">
     <div class="container py-5">
@@ -41,7 +42,7 @@ HTML_TEMPLATE = """
                   <input name="email" type="email" class="form-control" placeholder="ejemplo@correo.com" required>
                 </div>
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-primary"><i class="bi bi-download"></i>Enviar PDF por correo</button>
+                  <button type="submit" class="btn btn-primary"><i class="bi bi-download"></i> Enviar PDF por correo</button>
                 </div>
               </form>
             </div>
@@ -56,9 +57,7 @@ HTML_TEMPLATE = """
 </html>
 """
 
-
 # Crear PDF
-
 def crear_pdf(patente):
     font_size = 36
     page_width, _ = letter
@@ -94,9 +93,10 @@ def enviar_email(destinatario, archivo_pdf, nombre_patente):
             msg.add_attachment(f.read(), maintype='application', subtype='pdf', filename=f"{nombre_patente}.pdf")
 
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login('parramartinalejandro690@gmail.com', 'danmqxiyigoytkgi')  # Tu contraseña de app
+            smtp.login('parramartinalejandro690@gmail.com', 'danmqxiyigoytkgi')
             smtp.send_message(msg)
 
+        os.remove(archivo_pdf)
         return True
 
     except Exception as e:
@@ -113,11 +113,22 @@ def index():
         enviado = enviar_email(email, path, patente)
         if enviado:
             return render_template_string("""
-            <p>PDF de la patente <b>{{ patente }}</b> enviado a <b>{{ email }}</b></p>
-            <a href="/">Volver a enviar otra patente</a>
+            <div class="container py-5 text-center">
+              <div class="alert alert-success rounded-4 shadow-sm">
+                PDF de la patente <b>{{ patente }}</b> enviado exitosamente a <b>{{ email }}</b>
+              </div>
+              <a href="/" class="btn btn-outline-primary mt-3">Volver a enviar otra patente</a>
+            </div>
             """, patente=patente, email=email)
         else:
-            return "<p>Hubo un error al enviar el correo.</p><a href='/'>Volver a intentar</a>"
+            return render_template_string("""
+            <div class="container py-5 text-center">
+              <div class="alert alert-danger rounded-4 shadow-sm">
+                Hubo un error al enviar el correo.
+              </div>
+              <a href="/" class="btn btn-outline-danger mt-3">Volver a intentar</a>
+            </div>
+            ")
     return render_template_string(HTML_TEMPLATE)
 
 if __name__ == '__main__':
