@@ -21,6 +21,7 @@ HTML_TEMPLATE = """
 <html lang=\"es\">
   <head>
     <meta charset=\"UTF-8\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
     <title>Generador de Patentes</title>
     <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\">
     <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css\">
@@ -28,7 +29,7 @@ HTML_TEMPLATE = """
   <body class=\"bg-light\">
     <div class=\"container py-5\">
       <div class=\"row justify-content-center\">
-        <div class=\"col-md-5\">
+        <div class=\"col-12 col-md-6 col-lg-5\">
           <div class=\"card shadow rounded-4\">
             <div class=\"card-body\">
               <h3 class=\"card-title text-center mb-4\"><i class=\"bi bi-file-earmark-pdf\"></i> Generador de Patentes</h3>
@@ -117,6 +118,7 @@ def index():
             <html lang=\"es\">
             <head>
               <meta charset=\"UTF-8\">
+              <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
               <title>Resultado</title>
               <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\">
               <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css\">
@@ -124,7 +126,7 @@ def index():
             <body class=\"bg-light\">
               <div class='container py-5'>
                 <div class='row justify-content-center'>
-                  <div class='col-md-5'>
+                  <div class='col-12 col-md-6 col-lg-5'>
                     <div class='card shadow rounded-4'>
                       <div class='card-body text-center'>
                         <h4 class='card-title mb-4'><i class='bi bi-check-circle-fill text-success'></i> ¡Enviado!</h4>
@@ -137,13 +139,15 @@ def index():
               </div>
             </body>
             </html>
-            """)
+            ""
+            )
         else:
             return render_template_string("""
             <!DOCTYPE html>
             <html lang=\"es\">
             <head>
               <meta charset=\"UTF-8\">
+              <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
               <title>Error</title>
               <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\">
               <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css\">
@@ -151,7 +155,7 @@ def index():
             <body class=\"bg-light\">
               <div class='container py-5'>
                 <div class='row justify-content-center'>
-                  <div class='col-md-5'>
+                  <div class='col-12 col-md-6 col-lg-5'>
                     <div class='alert alert-danger text-center rounded-4 shadow-sm'>
                       <h4 class='mb-3'><i class='bi bi-x-circle-fill'></i> Error al enviar</h4>
                       <p>Hubo un error al enviar el correo.</p>
@@ -162,7 +166,8 @@ def index():
               </div>
             </body>
             </html>
-            """)
+            ""
+            )
     return render_template_string(HTML_TEMPLATE)
 
 if __name__ == '__main__':
