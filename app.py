@@ -42,11 +42,11 @@ def crear_pdf(patente):
     c.save()
     return pdf_path
 
-# Enviar email con archivo PDF adjunto
+# Enviar email con archivo PDF adjunto usando Gmail SMTP
 def enviar_email(destinatario, archivo_pdf, nombre_patente):
     msg = EmailMessage()
     msg['Subject'] = f"Patente {nombre_patente} en PDF"
-    msg['From'] = '8ea29e002@smtp-brevo.com'
+    msg['From'] = 'tucorreo@gmail.com'  # Reemplaza con tu correo
     msg['To'] = destinatario
     msg.set_content(f"Hola,\n\nAquí tienes el archivo PDF de la patente {nombre_patente}.\n\nGracias por usar la app.")
 
@@ -54,9 +54,8 @@ def enviar_email(destinatario, archivo_pdf, nombre_patente):
         msg.add_attachment(f.read(), maintype='application', subtype='pdf', filename=f"{nombre_patente}.pdf")
 
     try:
-        with smtplib.SMTP('smtp-relay.brevo.com', 587) as smtp:
-            smtp.starttls()
-            smtp.login('8ea29e002@smtp-brevo.com', '75UrzyN6RXObI4BM')
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+            smtp.login('parramartin690@gmail.com', 'danm qxiy igoy tkgi ')  # Reemplaza con tu correo y contraseña de app
             smtp.send_message(msg)
     except Exception as e:
         print(f"Error al enviar correo: {e}")
@@ -69,7 +68,7 @@ def index():
         email = request.form['email'].strip()
         path = crear_pdf(patente)
         enviar_email(email, path, patente)
-        return f"<p>PDF de la patente <b>{patente}</b> enviado a <b>{email}<p>"
+        return f"<p>PDF de la patente <b>{patente}</b> enviado a <b>{email}</b></p>"
     return render_template_string(HTML_TEMPLATE)
 
 if __name__ == '__main__':
