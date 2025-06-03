@@ -55,7 +55,7 @@ def enviar_email(destinatario, archivo_pdf, nombre_patente):
 
     try:
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login('parramartin690@gmail.com', 'danm qxiy igoy tkgi ')  # Reemplaza con tu correo y contraseña de app
+            smtp.login('parramartin690@gmail.com', 'danm qxiy igoy tkgi')  # Reemplaza con tu correo y contraseña de app
             smtp.send_message(msg)
     except Exception as e:
         print(f"Error al enviar correo: {e}")
