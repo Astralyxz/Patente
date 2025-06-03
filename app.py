@@ -31,6 +31,18 @@ HTML_TEMPLATE = """
 </html>
 """
 
+# HTML para respuesta
+RESULT_TEMPLATE = """
+<!DOCTYPE html>
+<html>
+  <head><title>Patente Enviada</title></head>
+  <body>
+    <p>PDF de la patente <b>{patente}</b> enviado a <b>{email}</b></p>
+    <a href="/">&#8592; Volver a enviar otra patente</a>
+  </body>
+</html>
+"""
+
 # Crear PDF
 
 def crear_pdf(patente):
@@ -61,14 +73,14 @@ def enviar_email(destinatario, archivo_pdf, nombre_patente):
     msg['Subject'] = f"Patente {nombre_patente} en PDF"
     msg['From'] = 'parramartinalejandro690@gmail.com'
     msg['To'] = destinatario
-    msg.set_content(f"Archivo PDF de la patente a imprimir {nombre_patente}.\n\nGracias.")
+    msg.set_content(f"Archivo PDF de la patente a imprimir {nombre_patente}")
 
     try:
         with open(archivo_pdf, 'rb') as f:
             msg.add_attachment(f.read(), maintype='application', subtype='pdf', filename=f"{nombre_patente}.pdf")
 
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login('parramartinalejandro690@gmail.com', 'danmqxiyigoytkgi')  # Tu contraseña de app
+            smtp.login('parramartinalejandro690@gmail.com', 'danmqxiyigoytkgi')  #contraseña de app
             smtp.send_message(msg)
 
         return True
@@ -86,9 +98,9 @@ def index():
         path = crear_pdf(patente)
         enviado = enviar_email(email, path, patente)
         if enviado:
-            return f"<p>PDF de la patente <b>{patente}</b> enviado a <b>{email}</b></p>"
+            return render_template_string(RESULT_TEMPLATE, patente=patente, email=email)
         else:
-            return "<p>Hubo un error al enviar el correo.</p>"
+            return "<p>Hubo un error al enviar el correo.</p><a href='/'>Volver</a>"
     return render_template_string(HTML_TEMPLATE)
 
 if __name__ == '__main__':
