@@ -22,7 +22,6 @@ HTML_TEMPLATE = """
   <head>
     <meta charset=\"UTF-8\">
     <title>Generador de Patentes</title>
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
     <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\">
     <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css\">
   </head>
@@ -114,16 +113,32 @@ def index():
         enviado = enviar_email(email, path, patente)
         if enviado:
             return render_template_string(f"""
-            <div class='container py-5 text-center'>
-              <div class='alert alert-success rounded-4 shadow-sm'>
-                PDF de la patente <b>{patente}</b> enviado exitosamente a <b>{email}</b>
+            <!DOCTYPE html>
+            <html lang=\"es\">
+            <head>
+              <meta charset=\"UTF-8\">
+              <title>Resultado</title>
+              <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\">
+              <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css\">
+            </head>
+            <body class=\"bg-light\">
+              <div class='container py-5'>
+                <div class='row justify-content-center'>
+                  <div class='col-md-5'>
+                    <div class='card shadow rounded-4'>
+                      <div class='card-body text-center'>
+                        <h4 class='card-title mb-4'><i class='bi bi-check-circle-fill text-success'></i> ¡Enviado!</h4>
+                        <p class='mb-4'>El PDF de la patente <b>{patente}</b> fue enviado exitosamente a <b>{email}</b>.</p>
+                        <a href='/' class='btn btn-outline-primary'>Volver a enviar otra patente</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class='d-flex justify-content-center gap-2'>
-                <a href='/' class='btn btn-outline-primary'>Volver a enviar otra patente</a>
-                <a href='/descargar/{patente}' class='btn btn-outline-secondary'>Descargar PDF</a>
-              </div>
-            </div>
-            """)
+            </body>
+            </html>
+            ""
+            )
         else:
             return render_template_string("""
             <div class='container py-5 text-center'>
@@ -132,13 +147,9 @@ def index():
               </div>
               <a href='/' class='btn btn-outline-danger mt-3'>Volver a intentar</a>
             </div>
-            """)
+            ""
+            )
     return render_template_string(HTML_TEMPLATE)
-
-@app.route('/descargar/<patente>')
-def descargar(patente):
-    path = crear_pdf(patente)
-    return send_file(path, as_attachment=True)
 
 if __name__ == '__main__':
     app.run(debug=True)
