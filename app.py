@@ -42,7 +42,7 @@ HTML_TEMPLATE = """
                   <input name=\"email\" type=\"email\" class=\"form-control\" placeholder=\"ejemplo@correo.com\" required>
                 </div>
                 <div class=\"d-grid\">
-                  <button type=\"submit\" class=\"btn btn-primary\"><i class="bi bi-send"></i> Enviar PDF por correo</button>
+                  <button type=\"submit\" class=\"btn btn-primary\"><i class=\"bi bi-download\"></i> Enviar PDF por correo</button>
                 </div>
               </form>
             </div>
@@ -137,8 +137,7 @@ def index():
               </div>
             </body>
             </html>
-            ""
-            )
+            """)
         else:
             return render_template_string("""
             <!DOCTYPE html>
@@ -153,20 +152,17 @@ def index():
               <div class='container py-5'>
                 <div class='row justify-content-center'>
                   <div class='col-md-5'>
-                    <div class='card shadow rounded-4'>
-                      <div class='card-body text-center'>
-                        <h4 class='card-title mb-4'><i class='bi bi-exclamation-triangle-fill text-danger'></i> Error</h4>
-                        <p class='mb-4'>Hubo un error al enviar el correo.</p>
-                        <a href='/' class='btn btn-outline-danger'>Volver a intentar</a>
-                      </div>
+                    <div class='alert alert-danger text-center rounded-4 shadow-sm'>
+                      <h4 class='mb-3'><i class='bi bi-x-circle-fill'></i> Error al enviar</h4>
+                      <p>Hubo un error al enviar el correo.</p>
+                      <a href='/' class='btn btn-outline-danger mt-3'>Volver a intentar</a>
                     </div>
                   </div>
                 </div>
               </div>
             </body>
             </html>
-            ""
-            )
+            """)
     return render_template_string(HTML_TEMPLATE)
 
 if __name__ == '__main__':
