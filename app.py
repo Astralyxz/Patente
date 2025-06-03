@@ -9,11 +9,13 @@ import os
 
 app = Flask(__name__)
 
-# Ruta de la fuente TTF
+# Registrar fuente personalizada
 FONT_PATH = "5x5dotso.ttf"
+if not os.path.exists(FONT_PATH):
+    raise FileNotFoundError("No se encontró el archivo de fuente 5x5dotso.ttf")
 pdfmetrics.registerFont(TTFont("Dots", FONT_PATH))
 
-# HTML simple para la interfaz
+# HTML
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html>
@@ -21,7 +23,7 @@ HTML_TEMPLATE = """
   <body>
     <h2>Generar y Enviar Patente</h2>
     <form method="POST">
-      <input name="patente" type="text" required>
+      <input name="patente" type="text" required placeholder="Ej: JJSP45">
       <input name="email" type="email" required placeholder="Correo destino">
       <input type="submit" value="Enviar PDF por correo">
     </form>
@@ -29,7 +31,7 @@ HTML_TEMPLATE = """
 </html>
 """
 
-# Crear PDF de patente con la fuente personalizada
+# Crear PDF
 def crear_pdf(patente):
     pdf_path = f"{patente}.pdf"
     c = canvas.Canvas(pdf_path, pagesize=A4)
@@ -42,7 +44,7 @@ def crear_pdf(patente):
     c.save()
     return pdf_path
 
-# Enviar email con archivo PDF adjunto usando Gmail SMTP
+# Enviar PDF por correo
 def enviar_email(destinatario, archivo_pdf, nombre_patente):
     msg = EmailMessage()
     msg['Subject'] = f"Patente {nombre_patente} en PDF"
@@ -50,25 +52,32 @@ def enviar_email(destinatario, archivo_pdf, nombre_patente):
     msg['To'] = destinatario
     msg.set_content(f"Hola,\n\nAquí tienes el archivo PDF de la patente {nombre_patente}.\n\nGracias por usar la app.")
 
-    with open(archivo_pdf, 'rb') as f:
-        msg.add_attachment(f.read(), maintype='application', subtype='pdf', filename=f"{nombre_patente}.pdf")
-
     try:
+        with open(archivo_pdf, 'rb') as f:
+            msg.add_attachment(f.read(), maintype='application', subtype='pdf', filename=f"{nombre_patente}.pdf")
+
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-            smtp.login('parramartin690@gmail.com', 'danmqxiyigoytkgi')  # Reemplaza con tu correo y contraseña de app
+            smtp.login('parramartin690@gmail.com', 'danmqxiyigoytkgi')  # Tu contraseña de app
             smtp.send_message(msg)
+
+        return True
+
     except Exception as e:
         print(f"Error al enviar correo: {e}")
+        return False
 
-# Rutas web
+# Ruta web
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         patente = request.form['patente'].strip().upper()
         email = request.form['email'].strip()
         path = crear_pdf(patente)
-        enviar_email(email, path, patente)
-        return f"<p>PDF de la patente <b>{patente}</b> enviado a <b>{email}</b></p>"
+        enviado = enviar_email(email, path, patente)
+        if enviado:
+            return f"<p>✅ PDF de la patente <b>{patente}</b> enviado a <b>{email}</b></p>"
+        else:
+            return "<p>❌ Hubo un error al enviar el correo. Intenta más tarde o revisa los datos.</p>"
     return render_template_string(HTML_TEMPLATE)
 
 if __name__ == '__main__':
