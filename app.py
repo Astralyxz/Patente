@@ -27,7 +27,7 @@ HTML_TEMPLATE = """
   <body class="bg-light">
     <div class="container py-5">
       <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <div class="card shadow rounded-4">
             <div class="card-body">
               <h3 class="card-title text-center mb-4"><i class="bi bi-file-earmark-pdf"></i> Generador de Patentes</h3>
