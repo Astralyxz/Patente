@@ -18,18 +18,44 @@ pdfmetrics.registerFont(TTFont("5x5DotsOutline", FONT_PATH))
 # HTML
 HTML_TEMPLATE = """
 <!DOCTYPE html>
-<html>
-  <head><title>Generador de Patentes</title></head>
-  <body>
-    <h2>Generar y Enviar Patente</h2>
-    <form method="POST">
-      <input name="patente" type="text" required placeholder="Ej: JJSP45">
-      <input name="email" type="email" required placeholder="Correo destino">
-      <input type="submit" value="Enviar PDF por correo">
-    </form>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <title>Generador de Patentes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body class="bg-light">
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow rounded-4">
+            <div class="card-body">
+              <h3 class="card-title text-center mb-4">📄 Generador de Patentes</h3>
+              <form method="POST">
+                <div class="mb-3">
+                  <label for="patente" class="form-label">Patente</label>
+                  <input name="patente" type="text" class="form-control" placeholder="Ej: JJSP45" required>
+                </div>
+                <div class="mb-3">
+                  <label for="email" class="form-label">Correo destino</label>
+                  <input name="email" type="email" class="form-control" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary">📤 Enviar PDF por correo</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="text-center mt-3 text-muted">
+            <small>Desarrollado por Martín - Proyecto de patente</small>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
 """
+
 
 # Crear PDF
 
