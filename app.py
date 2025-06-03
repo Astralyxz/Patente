@@ -43,7 +43,7 @@ HTML_TEMPLATE = """
                   <input name=\"email\" type=\"email\" class=\"form-control\" placeholder=\"ejemplo@correo.com\" required>
                 </div>
                 <div class=\"d-grid\">
-                  <button type=\"submit\" class=\"btn btn-primary\"><i class=\"bi bi-download\"></i> Enviar PDF por correo</button>
+                  <button type=\"submit\" class=\"btn btn-primary\"><i class="bi bi-send"></i> Enviar PDF por correo</button>
                 </div>
               </form>
             </div>
