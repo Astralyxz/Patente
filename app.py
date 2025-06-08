@@ -89,20 +89,27 @@ def enviar_email(destinatario, archivo_pdf, nombre_patente):
     msg['To'] = destinatario
     msg.set_content(f"Archivo PDF de la patente a imprimir {nombre_patente}")
 
+    success = False
     try:
         with open(archivo_pdf, 'rb') as f:
-            msg.add_attachment(f.read(), maintype='application', subtype='pdf', filename=f"{nombre_patente}.pdf")
+            msg.add_attachment(
+                f.read(), maintype='application', subtype='pdf',
+                filename=f"{nombre_patente}.pdf")
 
         with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
             smtp.login('parramartinalejandro690@gmail.com', 'danmqxiyigoytkgi')
             smtp.send_message(msg)
 
-        os.remove(archivo_pdf)
-        return True
+        success = True
 
     except Exception as e:
         print(f"Error al enviar correo: {e}")
-        return False
+
+    finally:
+        if os.path.exists(archivo_pdf):
+            os.remove(archivo_pdf)
+
+    return success
 
 # Ruta web
 @app.route('/', methods=['GET', 'POST'])
